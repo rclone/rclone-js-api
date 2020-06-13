@@ -4,7 +4,7 @@
   "description": "Java Script bindings for rclone rc api",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Skipping tests for now TODO\""
   },
   "repository": {
     "type": "git",
