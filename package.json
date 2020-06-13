@@ -3,6 +3,7 @@
   "version": "1.0.3",
   "description": "Java Script bindings for rclone rc api",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Skipping tests for now TODO\""
   },
