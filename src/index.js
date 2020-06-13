@@ -215,7 +215,10 @@ export const getJobStatus = (jobId) => {
  */
 export const purgeDir = (fs , remote) => {
 	return new Promise((resolve, reject) => {
-		axiosInstance.post(urls.purge).then(res => {
+		axiosInstance.post(urls.purge, {
+			fs,
+			remote
+		}).then(res => {
 			resolve(res.data);
 		}, error => {
 			reject(error);
