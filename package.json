@@ -1,10 +1,14 @@
 {
   "name": "rclone-api",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Java Script bindings for rclone rc api",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:rclone/rclone-js-api.git"
   },
   "keywords": [],
   "author": "rclone",

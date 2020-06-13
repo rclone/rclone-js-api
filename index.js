@@ -17,7 +17,7 @@ export const getStats = () => {
 }
 
 /**
- *
+ * getCurrentBandwidthSetting fetches the current limit that is max which the rclone can send request at.
  * @returns {Promise<unknown>}
  */
 export const getCurrentBandwidthSetting = () => {
@@ -46,12 +46,13 @@ export const setCurrentBandwidthSetting = (newRate) => {
 }
 
 /**
- * Create a public link for a supported remote
+ * createPublicLink creates a public link for a supported remote
  * @param remoteName {string}
  * @param remotePath {string}
  * @returns {Function}
  */
-export const createPublicLink = (remoteName, remotePath) => {
+export const createNewPublicLink = (remoteName, remotePath) => {
+	remoteName = addColonAtLast(remoteName);
 	return new Promise((resolve, reject) => {
 		axiosInstance.post(urls.createPublicLink, {fs: remoteName, remote: remotePath}).then(res => {
 			resolve(res.data);
@@ -68,7 +69,7 @@ export const createPublicLink = (remoteName, remotePath) => {
 export const getAllProviders = () => {
 	return new Promise((resolve, reject) => {
 		axiosInstance.post(urls.getProviders).then(res => {
-			resolve(res.data.providers);
+			resolve(res.data);
 		}, error => {
 			reject(error);
 		})
@@ -79,7 +80,7 @@ export const getAllProviders = () => {
  * getConfigDump return the configured remotes from the rclone backend
  * @returns {Promise<unknown>}
  */
-export const getConfigDump = () => {
+export const getAllConfigDump = () => {
 	return new Promise((resolve, reject) => {
 		axiosInstance.post(urls.getConfigDump).then(res => {
 			resolve(res.data);
@@ -89,7 +90,7 @@ export const getConfigDump = () => {
 	})
 }
 /**
- * getFsInfo fetches the information regarding features, hashes from the rclone backend. Stores into redux store.
+ * getFsInfo fetches the information regarding features, hashes from the rclone backend.
  * @param remoteName {string} The name of the remote
  * @returns {Function}
  */
@@ -110,7 +111,7 @@ export const getFsInfo = (remoteName) => {
 }
 
 /**
- * getFilesList fetches the files for a specified remote path (remoteName + remotePath). Stores into redux store.
+ * getFilesList fetches the files for a specified remote path (remoteName + remotePath).
  * @param fs {string} Name of the remote config/ ("/" for local path). May contain abc:bucketName for bucket based remotes
  * @param remotePath {string} Name of the path in the remote
  * @returns {Function}
@@ -124,7 +125,7 @@ export const getFilesList = (fs, remotePath) => {
 		// check if it is a local path
 		fs = fs.indexOf('/') !== 0 ? addColonAtLast(fs) : fs;
 
-		axiosInstance.post(urls.getFsInfo, {
+		axiosInstance.post(urls.getFilesList, {
 			fs,
 			remote: remotePath
 		}).then(res => {
@@ -152,8 +153,8 @@ export const getRemoteInfo = (remoteName) => {
 		if (!isLocalRemoteName(remoteName)) {
 			remoteName = addColonAtLast(remoteName);
 		}
-		axiosInstance.post(urls.getAbout, {
-				fs: remoteName
+		axiosInstance.post(urls.getFsInfo, {
+			fs: remoteName
 		}).then(res => {
 			resolve(res.data);
 		}, error => {
@@ -164,8 +165,7 @@ export const getRemoteInfo = (remoteName) => {
 }
 
 /**
- * getRemoteInfo fetches the information about a provider.
- * @param remoteName
+ * getRcloneVersion fetches the version and details about the running rclone version.
  * @returns {Promise<unknown>}
  */
 export const getRcloneVersion = () => {
@@ -178,3 +178,102 @@ export const getRcloneVersion = () => {
 	})
 }
 
+
+/**
+ * getAllRemoteNames fetches all the remotes in the config.
+ * @returns {Promise<unknown>}
+ */
+export const getAllRemoteNames = () => {
+	return new Promise((resolve, reject) => {
+		axiosInstance.post(urls.listRemotes).then(res => {
+			resolve(res.data);
+		}, error => {
+			reject(error);
+		})
+	})
+}
+
+/**
+ * getJobStatus returns the status of a job with jobId
+ * @param jobId {number} Valid job id
+ * @return {Promise<unknown>}
+ */
+export const getJobStatus = (jobId) => {
+	return new Promise((resolve, reject) => {
+		axiosInstance.post(urls.getStatusForJob, {jobId}).then(res => {
+			resolve(res.data);
+		}, error => {
+			reject(error);
+		})
+	})
+}
+
+/**
+ * purgeDir returns the status of a job with jobId
+ * @param jobId {number} Valid job id
+ * @return {Promise<unknown>}
+ */
+export const purgeDir = (fs , remote) => {
+	return new Promise((resolve, reject) => {
+		axiosInstance.post(urls.purge).then(res => {
+			resolve(res.data);
+		}, error => {
+			reject(error);
+		})
+	})
+}
+
+
+/**
+ * deleteFile returns the status of a job with jobId
+ * @param fs		{string}	Remote Name
+ * @param remote	{string}	Remote Path
+ * @return {Promise<unknown>}
+ */
+export const deleteFile = (fs , remote) => {
+	fs = addColonAtLast(fs)
+	return new Promise((resolve, reject) => {
+		axiosInstance.post(urls.deleteFile, {
+			fs,
+			remote
+		}).then(res => {
+			resolve(res.data);
+		}, error => {
+			reject(error);
+		})
+	})
+}
+
+/**
+ * cleanTrashForRemote returns the status of a job with jobId
+ * @param fs		{string}	Remote Name
+ * @return {Promise<unknown>}
+ */
+export const cleanTrashForRemote = (fs) => {
+	if (!isLocalRemoteName(fs)) {
+		fs = addColonAtLast(fs);
+	}
+	return new Promise((resolve, reject) => {
+		axiosInstance.post(urls.cleanUpRemote, {
+			fs,
+		}).then(res => {
+			resolve(res.data);
+		}, error => {
+			reject(error);
+		})
+	})
+}
+
+export const getDownloadURLForFile = (ipAddress, fsInfo, remoteName, remotePath, item) => {
+	let downloadURL = "";
+
+	if (fsInfo.Features.BucketBased) {
+		downloadURL = ipAddress + `[${remoteName}]/${remotePath}/${item.Name}`;
+
+	} else {
+
+		downloadURL = ipAddress + `[${remoteName}:${remotePath}]/${item.Name}`;
+
+	}
+	return downloadURL;
+}
