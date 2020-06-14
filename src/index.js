@@ -1,6 +1,10 @@
-const axiosInstance = require('./axiosInstance');
-const urls = require('./endpoint');
-const tools = require('./Tools')
+import {axiosInstance} from "./axiosInstance";
+import urls from "./endpoint";
+import {addColonAtLast, isLocalRemoteName} from "./Tools";
+
+// const axiosInstance = require('./axiosInstance');
+// const urls = require('./endpoint');
+// const tools = require('./Tools')
 
 /**
  * getStats returns the current rclone stats.
