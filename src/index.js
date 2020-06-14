@@ -1,6 +1,6 @@
-import {axiosInstance} from "./axiosInstance";
-import urls from "./endpoint";
-import {addColonAtLast, isLocalRemoteName} from "./Tools";
+const axiosInstance = require('./axiosInstance');
+const urls = require('./endpoint');
+const tools = require('./Tools')
 
 /**
  * getStats returns the current rclone stats.
@@ -52,7 +52,7 @@ export const setCurrentBandwidthSetting = (newRate) => {
  * @returns {Function}
  */
 export const createNewPublicLink = (remoteName, remotePath) => {
-	remoteName = addColonAtLast(remoteName);
+	remoteName = tools.addColonAtLast(remoteName);
 	return new Promise((resolve, reject) => {
 		axiosInstance.post(urls.createPublicLink, {fs: remoteName, remote: remotePath}).then(res => {
 			resolve(res.data);
@@ -209,8 +209,9 @@ export const getJobStatus = (jobId) => {
 }
 
 /**
- * purgeDir returns the status of a job with jobId
- * @param jobId {number} Valid job id
+ * purgeDir deletes the directory with given fs and remote
+ * @param fs		{string}	Name of fs
+ * @param remote	{string}	path remoteName
  * @return {Promise<unknown>}
  */
 export const purgeDir = (fs , remote) => {
@@ -248,7 +249,7 @@ export const deleteFile = (fs , remote) => {
 }
 
 /**
- * cleanTrashForRemote returns the status of a job with jobId
+ * cleanTrashForRemote cleans the trash for the remote with remote fs
  * @param fs		{string}	Remote Name
  * @return {Promise<unknown>}
  */

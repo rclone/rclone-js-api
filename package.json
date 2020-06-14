@@ -5,9 +5,8 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Skipping tests for now TODO\"",
-    "compile:commonjs": "better-npm-run compile:commonjs",
-    "compile:es": "babel -d es/ src/",
-    "compile": "babel src --out-dir lib",
+    "compile:es": "babel src --out-dir lib",
+    "compile": "npm run compile:es ",
     "prepare": "npm run compile"
   },
   "babel": {

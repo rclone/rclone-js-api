@@ -1,5 +1,6 @@
-import axios from "axios";
-import {AUTH_KEY, IP_ADDRESS_KEY} from "./constants";
+const axios = require("axios");
+
+const constants = require("./constants");
 
 /**
  * Global level axios configuration. These settings are automatically used in other places by using an axiosInstance instead of axios directly
@@ -14,11 +15,12 @@ export let axiosInstance = axios.create({
  */
 axiosInstance.interceptors.request.use(
 	config => {
-		config.baseURL = localStorage.getItem(IP_ADDRESS_KEY);
+		config.baseURL = localStorage.getItem(constants.IP_ADDRESS_KEY);
 
-		config.headers.Authorization = 'Basic ' + localStorage.getItem(AUTH_KEY);
+		config.headers.Authorization = 'Basic ' + localStorage.getItem(constants.AUTH_KEY);
 		return config;
 	},
 	error => Promise.reject(error)
 );
 
+export default axiosInstance;
