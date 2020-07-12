@@ -117,5 +117,14 @@ const urls = {
      */
     stopJob: "job/stop",
 
+    /**
+     * Send a command to backend through rc
+     */
+    backendCommand: "backend/command",
+
+    /**
+     * Executes rclone in a seperate process for output
+     */
+    coreCommand: "core/command",
 };
 export default urls;

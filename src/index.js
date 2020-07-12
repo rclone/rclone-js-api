@@ -272,6 +272,15 @@ export const cleanTrashForRemote = (fs) => {
 	})
 }
 
+/**
+ * Get a downloadable url for an rclone object
+ * @param ipAddress 	{string}	IP address of running rclone instance
+ * @param fsInfo		{object} 	FsInfo of the remote
+ * @param remoteName	{string}	name of the remote
+ * @param remotePath	{string}	path of the file. Relative to remoteName
+ * @param item			{string}	item details
+ * @returns 			{string}	url which can be used to download the required file.
+ */
 export const getDownloadURLForFile = (ipAddress, fsInfo, remoteName, remotePath, item) => {
 	let downloadURL = "";
 
@@ -284,4 +293,50 @@ export const getDownloadURLForFile = (ipAddress, fsInfo, remoteName, remotePath,
 
 	}
 	return downloadURL;
+}
+
+/**
+ * Send a backend command and return the result.
+ * @param command	{string}			string with the command name
+ * @param arg		{array<string>}	 	remote name string eg "drive:"
+ * @param opt		{$ObjMap}			list of arguments for the backend command
+ * @param fs		{string}		 	remote name string eg "drive:"
+ * @returns {Promise<$ObjMap>}
+ */
+export const backendCommand = (command, arg, opt, fs) => {
+	if(!fs) fs = ".";
+
+	return new Promise((resolve, reject) => {
+		if(!command || !arg || !opt) throw new Error(`One or more invalid arguments {${command}},{${arg}} {${opt}} {${fs}}`)
+		axiosInstance.post(urls.backendCommand, {
+			command,
+			arg,
+			opt,
+			fs
+		}).then(res => {
+			resolve(res.data);
+		}, error => {
+			reject(error);
+		})
+	});
+}
+
+/**
+ * Send a backend command and return the result.
+ * @param arg		{array<string>}	 	remote name string eg "drive:"
+ * @param opt		{$ObjMap}			list of arguments for the backend command
+ * @returns {Promise<$ObjMap>}
+ */
+export const coreCommand = ( arg, opt) => {
+	return new Promise((resolve, reject) => {
+		if(!arg || !opt) throw new Error(`One or more invalid arguments ,{${arg}} {${opt}}`)
+		axiosInstance.post(urls.coreCommand, {
+			arg,
+			opt,
+		}).then(res => {
+			resolve(res.data);
+		}, error => {
+			reject(error);
+		})
+	});
 }
