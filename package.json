@@ -1,6 +1,6 @@
 {
   "name": "rclone-api",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Java Script bindings for rclone rc api",
   "main": "lib/index.js",
   "scripts": {
