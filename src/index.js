@@ -56,7 +56,9 @@ export const setCurrentBandwidthSetting = (newRate) => {
  * @returns {Function}
  */
 export const createNewPublicLink = (remoteName, remotePath) => {
-	remoteName = tools.addColonAtLast(remoteName);
+	if (!isLocalRemoteName(remoteName)) {
+		fs = addColonAtLast(remoteName);
+	}
 	return new Promise((resolve, reject) => {
 		axiosInstance.post(urls.createPublicLink, {fs: remoteName, remote: remotePath}).then(res => {
 			resolve(res.data);
@@ -123,11 +125,13 @@ export const getFsInfo = (remoteName) => {
 export const getFilesList = (fs, remotePath) => {
 	return new Promise((resolve, reject) => {
 		if(!fs || fs === ""){
-			reject("Invalid fs specified")
+			reject("Invalid fs specified");
+			return;
 		}
 
-		// check if it is a local path
-		fs = fs.indexOf('/') !== 0 ? addColonAtLast(fs) : fs;
+		if (!isLocalRemoteName(fs)) {
+			fs = addColonAtLast(fs);
+		}
 
 		axiosInstance.post(urls.getFilesList, {
 			fs,
@@ -150,8 +154,8 @@ export const getRemoteInfo = (remoteName) => {
 	return new Promise((resolve, reject) => {
 
 		if(!remoteName) {
-			reject("Invalid remote name specified")
-			return
+			reject("Invalid remote name specified");
+			return;
 		}
 
 		if (!isLocalRemoteName(remoteName)) {
@@ -219,6 +223,9 @@ export const getJobStatus = (jobId) => {
  * @return {Promise<unknown>}
  */
 export const purgeDir = (fs , remote) => {
+	if (!isLocalRemoteName(fs)) {
+		fs = addColonAtLast(fs);
+	}
 	return new Promise((resolve, reject) => {
 		axiosInstance.post(urls.purge, {
 			fs,
@@ -239,7 +246,9 @@ export const purgeDir = (fs , remote) => {
  * @return {Promise<unknown>}
  */
 export const deleteFile = (fs , remote) => {
-	fs = addColonAtLast(fs)
+	if (!isLocalRemoteName(fs)) {
+		fs = addColonAtLast(fs);
+	}
 	return new Promise((resolve, reject) => {
 		axiosInstance.post(urls.deleteFile, {
 			fs,
