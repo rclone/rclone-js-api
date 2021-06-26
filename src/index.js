@@ -1,10 +1,6 @@
 import {axiosInstance} from "./axiosInstance";
 import urls from "./endpoint";
-import {addColonAtLast, isLocalRemoteName} from "./Tools";
-
-// const axiosInstance = require('./axiosInstance');
-// const urls = require('./endpoint');
-// const tools = require('./Tools')
+import {addColonAtLast, isLocalRemoteName} from "./tools";
 
 /**
  * getStats returns the current rclone stats.
@@ -57,7 +53,7 @@ export const setCurrentBandwidthSetting = (newRate) => {
  */
 export const createNewPublicLink = (remoteName, remotePath) => {
 	if (!isLocalRemoteName(remoteName)) {
-		fs = addColonAtLast(remoteName);
+		remoteName = addColonAtLast(remoteName);
 	}
 	return new Promise((resolve, reject) => {
 		axiosInstance.post(urls.createPublicLink, {fs: remoteName, remote: remotePath}).then(res => {
