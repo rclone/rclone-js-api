@@ -126,5 +126,10 @@ const urls = {
      * Executes rclone in a seperate process for output
      */
     coreCommand: "core/command",
+
+    /**
+     * Transferred jobs for rclone.
+     */
+    transferred: 'core/transferred',
 };
 export default urls;

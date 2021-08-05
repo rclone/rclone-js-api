@@ -345,3 +345,18 @@ export const coreCommand = ( arg, opt) => {
 		})
 	});
 }
+
+
+/**
+ * getTransferredStats returns transferred job stats.
+ * @returns {Promise<unknown>}
+ */
+ export const getTransferredStats = () => {
+	return new Promise((resolve, reject) => {
+		axiosInstance.post(urls.transferred).then(res => {
+			resolve(res.data);
+		}, error => {
+			reject(error);
+		})
+	})
+}
