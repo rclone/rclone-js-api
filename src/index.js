@@ -118,7 +118,7 @@ export const getFsInfo = (remoteName) => {
  * @param remotePath {string} Name of the path in the remote
  * @returns {Function}
  */
-export const getFilesList = (fs, remotePath) => {
+export const getFilesList = (fs, remotePath, options = {}) => {
 	return new Promise((resolve, reject) => {
 		if(!fs || fs === ""){
 			reject("Invalid fs specified");
@@ -131,7 +131,8 @@ export const getFilesList = (fs, remotePath) => {
 
 		axiosInstance.post(urls.getFilesList, {
 			fs,
-			remote: remotePath
+			remote: remotePath,
+			opt: options
 		}).then(res => {
 			resolve(res.data);
 		}, error => {
