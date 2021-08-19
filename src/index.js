@@ -374,8 +374,20 @@ export const coreCommand = ( arg, opt) => {
 	})
 }
 
+
+/**
+ * stopJob stops a job with the specified jobId.
+ * @returns {Promise<unknown>}
+ */
+ export const stopJob = (jobId) => {
+	let data = {};
+	if (jobId) {
+		data = {
+			jobid: jobId,
+		};
+	};
 	return new Promise((resolve, reject) => {
-		axiosInstance.post(urls.transferred).then(res => {
+		axiosInstance.post(urls.stopJob, data).then(res => {
 			resolve(res.data);
 		}, error => {
 			reject(error);
