@@ -6,9 +6,15 @@ import {addColonAtLast, isLocalRemoteName} from "./tools";
  * getStats returns the current rclone stats.
  * @returns {Promise<unknown>}
  */
-export const getStats = () => {
+export const getStats = (group) => {
+	let data = {};
+		if (group) {
+			data = {
+				group
+			};
+		};
 	return new Promise((resolve, reject) => {
-		axiosInstance.post(urls.stats).then(res => {
+		axiosInstance.post(urls.stats, data).then(res => {
 			resolve(res.data);
 		}, error => {
 			reject(error);
@@ -352,7 +358,22 @@ export const coreCommand = ( arg, opt) => {
  * getTransferredStats returns transferred job stats.
  * @returns {Promise<unknown>}
  */
- export const getTransferredStats = () => {
+ export const getTransferredStats = (group) => {
+	let data = {};
+	if (group) {
+		data = {
+			group
+		};
+	};
+	return new Promise((resolve, reject) => {
+		axiosInstance.post(urls.transferred, data).then(res => {
+			resolve(res.data);
+		}, error => {
+			reject(error);
+		})
+	})
+}
+
 	return new Promise((resolve, reject) => {
 		axiosInstance.post(urls.transferred).then(res => {
 			resolve(res.data);
