@@ -394,3 +394,16 @@ export const coreCommand = ( arg, opt) => {
 		})
 	})
 }
+
+export const getSize = (srcFs, srcRemote) => {
+	let data = {
+		fs: `${srcFs}${srcRemote ? srcRemote : ''}`
+	};
+	return new Promise((resolve, reject) => {
+		axiosInstance.post(urls.getSize, data).then(res => {
+			resolve(res.data);
+		}, error => {
+			reject(error);
+		})
+	})
+}

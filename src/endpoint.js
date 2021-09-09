@@ -131,5 +131,10 @@ const urls = {
      * Transferred jobs for rclone.
      */
     transferred: 'core/transferred',
+
+    /**
+     * getSize of a fs
+     */
+    getSize: 'operations/size'
 };
 export default urls;
