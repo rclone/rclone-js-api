@@ -135,6 +135,18 @@ const urls = {
     /**
      * getSize of a fs
      */
-    getSize: 'operations/size'
+    getSize: 'operations/size',
+
+    /**
+     * This deletes entire stats group.
+     */
+    statsDelete: 'core/stats-delete',
+
+
+    /**
+     * This clears counters, errors and finished transfers for all stats or specific stats group if group is provided.
+     */
+    statsReset: 'core/stats-reset',
+
 };
 export default urls;

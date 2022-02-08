@@ -407,3 +407,29 @@ export const getSize = (srcFs, srcRemote) => {
 		})
 	})
 }
+
+export const statsDelete = (group) => {
+	let data = {
+		group
+	};
+	return new Promise((resolve, reject) => {
+		axiosInstance.post(urls.statsDelete, data).then(res => {
+			resolve(res.data);
+		}, error => {
+			reject(error);
+		})
+	})
+}
+
+export const statsReset = (group) => {
+	let data = {
+		group
+	};
+	return new Promise((resolve, reject) => {
+		axiosInstance.post(urls.statsReset, data).then(res => {
+			resolve(res.data);
+		}, error => {
+			reject(error);
+		})
+	})
+}
